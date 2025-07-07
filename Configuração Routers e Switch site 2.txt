@@ -1,0 +1,1283 @@
+Subnet ID	Subnet Address	Host Address Range	Broadcast Address
+vlan default 1	vlan managment 100	vlan native 99vlan Produção 10 4	vlan Finanças vlan 30 Recurso Humanos
+server-fram 7	10.0.3.0	10.0.3.1 - 10.0.3.126	10.0.3.127
+
+site-2 interno
+8	10.0.3.128	10.0.3.129 - 10.0.3.254	10.0.3.255
+9	10.0.4.0	10.0.4.1 - 10.0.4.126	10.0.4.127
+10	10.0.4.128	10.0.4.129 - 10.0.4.254	10.0.4.255
+11	10.0.5.0	10.0.5.1 - 10.0.5.126	10.0.5.127
+12	10.0.5.128	10.0.5.129 - 10.0.5.254	10.0.5.255
+13	10.0.6.0	10.0.6.1 - 10.0.6.126	10.0.6.127
+14	10.0.6.128	10.0.6.129 - 10.0.6.254	10.0.6.255
+
+site2-sucursais
+15	10.0.7.0	10.0.7.1 - 10.0.7.126	10.0.7.127
+16	10.0.7.128	10.0.7.129 - 10.0.7.254	10.0.7.255
+17	10.0.8.0	10.0.8.1 - 10.0.8.126	10.0.8.127
+
+18	10.0.8.128	10.0.8.129 - 10.0.8.254	10.0.8.255
+
+19	10.0.9.0	10.0.9.1 - 10.0.9.126	10.0.9.127
+
+20	10.0.9.128	10.0.9.129 - 10.0.9.254	10.0.9.255
+
+21	10.0.10.0	10.0.10.1 - 10.0.10.126	10.0.10.127
+
+22	10.0.10.128	10.0.10.129 - 10.0.10.254	10.0.10.255
+
+23	10.0.11.0	10.0.11.1 - 10.0.11.126	10.0.11.127
+24	10.0.11.128	10.0.11.129 - 10.0.11.254	10.0.11.255
+
+vlan default 1     25	10.0.12.0	10.0.12.1 - 10.0.12.126	10.0.12.127
+vlan managment 100 26	10.0.12.128	10.0.12.129 - 10.0.12.254	10.0.12.255
+vlan native 99     27	10.0.13.0	10.0.13.1 - 10.0.13.126	10.0.13.127
+vlan Produção 10   28	10.0.13.128	10.0.13.129 - 10.0.13.254	10.0.13.255
+vlan Finanças 20   29	10.0.14.0	10.0.14.1 - 10.0.14.126	10.0.14.127
+vlan 30 Recurso Humanos 30	10.0.14.128	10.0.14.129 - 10.0.14.254	10.0.14.255
+
+
+31	10.0.15.0	10.0.15.1 - 10.0.15.126	10.0.15.127
+32	10.0.15.128	10.0.15.129 - 10.0.15.254	10.0.15.255
+
+___________________________________________________________________
+hostname S5
+enable secret club
+!
+vlan 100
+name MANAGMENT
+vlan 99
+name NATIVE
+vlan 10
+name PRODUÇÃO
+vlan 20
+name FINANÇAS
+vlan 30
+name RECURSOH
+!
+interface range fa0/11-13
+switchport mode access
+switchport access vlan 10
+!
+interface range fa0/14-17
+switchport mode access
+switchport access vlan 20
+!
+interface range fa0/18-21
+switchport mode access
+switchport access vlan 30
+!
+!etherchannel
+interface range fa0/7-8
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 1 mode active
+!
+!etherchannel
+interface range fa0/3-4
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 2 mode active
+!
+!etherchannel
+interface range fa0/9-10
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 3 mode active
+!
+interface gi0/1
+switchport mode trunk
+!
+interface vlan 100
+ip address 10.0.12.129 255.255.255.128
+no shutdown
+!
+ip default-gateway 10.0.12.254
+!
+banner motd #sistema privado#
+!
+line vty 0 4
+password jetvip
+login
+
+__________________________________________________
+hostname S4
+enable secret club
+!
+vlan 100
+name MANAGMENT
+vlan 99
+name NATIVE
+vlan 10
+name PRODUÇÃO
+vlan 20
+name FINANÇAS
+vlan 30
+name RECURSOH
+!
+interface range fa0/11-13
+switchport mode access
+switchport access vlan 10
+!
+interface range fa0/14-17
+switchport mode access
+switchport access vlan 20
+!
+interface range fa0/18-21
+switchport mode access
+switchport access vlan 30
+!!etherchannel
+interface range fa0/7-8
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 1 mode active
+!
+!etherchannel
+interface range fa0/5-6
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 2 mode active
+!
+!etherchannel
+interface range fa0/3-4
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 3 mode active
+!
+interface vlan 100
+ip address 10.0.12.130 255.255.255.128
+no shutdown
+!
+ip default-gateway 10.0.12.254
+!
+banner motd #sistema privado#
+!
+line vty 0 4
+password jetvip
+login
+____________________________________________________
+
+__________________________________________________
+hostname S1
+enable secret club
+!
+vlan 100
+name MANAGMENT
+vlan 99
+name NATIVE
+vlan 10
+name PRODUÇÃO
+vlan 20
+name FINANÇAS
+vlan 30
+name RECURSOH
+!
+interface range fa0/11-13
+switchport mode access
+switchport access vlan 10
+!
+interface range fa0/14-17
+switchport mode access
+switchport access vlan 20
+!
+interface range fa0/18-21
+switchport mode access
+switchport access vlan 30
+!
+!etherchannel
+interface range fa0/3-4
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 1 mode active
+!
+!etherchannel
+interface range fa0/7-8
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 2 mode active
+!
+!etherchannel
+interface range fa0/5-6
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 3 mode active
+!
+interface vlan 100
+ip address 10.0.12.131 255.255.255.128
+no shutdown
+!
+ip default-gateway 10.0.12.254
+!
+banner motd #sistema privado#
+!
+line vty 0 4
+password jetvip
+login
+____________________________________________________
+__________________________________________________
+hostname S3
+enable secret club
+!
+vlan 100
+name MANAGMENT
+vlan 99
+name NATIVE
+vlan 10
+name PRODUÇÃO
+vlan 20
+name FINANÇAS
+vlan 30
+name RECURSOH
+!
+interface range fa0/22
+switchport mode access
+switchport access vlan 100
+!
+interface range fa0/11-13
+switchport mode access
+switchport access vlan 10
+!
+interface range fa0/14-17
+switchport mode access
+switchport access vlan 20
+!
+interface range fa0/18-21
+switchport mode access
+switchport access vlan 30
+!
+!etherchannel
+interface range fa0/9-10
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 1 mode active
+!
+!etherchannel
+interface range fa0/6-7
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 2 mode active
+!
+!etherchannel
+interface range fa0/4-5
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 3 mode active
+!
+interface gi0/1
+switchport mode trunk
+!
+interface vlan 100
+ip address 10.0.12.132 255.255.255.128
+no shutdown
+!
+ip default-gateway 10.0.12.254
+!
+banner motd #sistema privado#
+!
+line vty 0 4
+password jetvip
+login
+____________________________________________________
+__________________________________________________
+hostname S2
+enable secret club
+!
+vlan 100
+name MANAGMENT
+vlan 99
+name NATIVE
+vlan 10
+name PRODUÇÃO
+vlan 20
+name FINANÇAS
+vlan 30
+name RECURSOH
+!
+interface range fa0/11-13
+switchport mode access
+switchport access vlan 10
+!
+interface range fa0/14-17
+switchport mode access
+switchport access vlan 20
+!
+interface range fa0/18-21
+switchport mode access
+switchport access vlan 30
+!
+!etherchannel
+interface range fa0/7-8
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 1 mode active
+!
+!etherchannel
+interface range fa0/5-6
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 2 mode active
+!
+!etherchannel
+interface range fa0/3-4
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 3 mode active
+!
+!etherchannel
+interface range fa0/9-10
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 4 mode active
+!
+interface vlan 100
+ip address 10.0.12.133 255.255.255.128
+no shutdown
+!
+ip default-gateway 10.0.12.254
+!
+banner motd #sistema privado#
+!
+line vty 0 4
+password jetvip
+login
+____________________________________________________
+
+hostname R0
+enable secret club
+!
+!
+ip dhcp pool VLAN100-128
+network 10.0.12.128 255.255.255.128
+default-router 10.0.12.254 
+dns-server 10.0.1.42 
+!
+ip dhcp pool VLAN10-128
+network 10.0.13.128 255.255.255.128
+default-router 10.0.13.254
+dns-server 10.0.1.42
+domain-name produção.com
+!
+ip dhcp pool VLAN20-0
+network 10.0.14.0 255.255.255.128
+default-router 10.0.14.126
+dns-server 10.0.1.42
+domain-name finanças.com
+!
+ip dhcp pool VLAN30-128
+network 10.0.14.128 255.255.255.128
+default-router 10.0.14.254
+dns-server 10.0.1.42
+domain-name recursos.com
+!
+interface gi0/0
+ip address 10.0.4.2 255.255.255.128
+
+no shutdown
+!
+interface gi0/1
+no shutdown
+!
+interface gi0/1.100
+description #LIGA VLAN 100#
+encapsulation dot1q 100
+ip helper-address 10.0.4.1
+ip address 10.0.12.252 255.255.255.128
+standby 100 ip 10.0.12.254
+  standby 100 priority 110
+  standby 100 preempt
+
+!
+interface gi0/1.10
+description #LIGA VLAN 10#
+encapsulation dot1q 10
+ip helper-address 10.0.4.1 
+ip address 10.0.13.252 255.255.255.128
+standby 10 ip 10.0.13.254
+  standby 10 priority 110
+  standby 10 preempt
+!
+interface gi0/1.20
+description #LIGA VLAN 20#
+encapsulation dot1q 20
+ip helper-address 10.0.4.1
+ip address 10.0.14.124 255.255.255.128
+  standby 20 ip 10.0.14.126
+  standby 20 priority 110
+  standby 20 preempt
+!
+interface gi0/1.30
+description #LIGA VLAN 30#
+encapsulation dot1q 30
+ip helper-address 10.0.4.1
+ip address 10.0.14.252 255.255.255.128
+standby 30 ip 10.0.14.254
+  standby 30 priority 110
+  standby 30 preempt
+no shutdown
+!
+interface gi0/1/0
+ip address 10.0.5.125 255.255.255.128
+no shutdown
+!
+interface gi0/2/0
+ip address 10.0.4.253 255.255.255.128
+no shutdown
+!
+router ospf 100 
+router-id 9.9.9.9 
+area 0 
+area 1 stub
+network 10.0.4.0 0.0.0.0 area 0
+network 10.0.4.128 0.0.0.255 area 0
+network 10.0.5.0 0.0.0.255 area 0
+network 10.0.12.128 0.0.0.255 area 1
+network 10.0.13.0 0.0.0.255 area 1
+network 10.0.14.128 0.0.0.255 area 1
+network 10.0.14.0 0.0.0.255 area 1
+default-information originate
+!
+banner motd #sistema privado#  # Correto: "motd" (Message of the Day)
+!
+line vty 0 4
+password jetvip
+login
+
+___________________________________________________________
+
+hostname R1
+enable secret club
+!
+!
+ip dhcp pool VLAN100-128
+network 10.0.12.128 255.255.255.128
+default-router 10.0.12.254
+dns-server 10.0.1.42 
+!
+ip dhcp pool VLAN10-128
+network 10.0.13.128 255.255.255.128
+default-router 10.0.13.254
+dns-server 10.0.1.42
+domain-name produção.com
+!
+ip dhcp pool VLAN20-0
+network 10.0.14.0 255.255.255.128
+default-router 10.0.14.126
+dns-server 10.0.1.42
+domain-name finanças.com
+!
+ip dhcp pool VLAN30-128
+network 10.0.14.128 255.255.255.128
+default-router 10.0.14.254
+dns-server 10.0.1.42
+domain-name recursos.com
+!
+interface gi0/0
+ip address 10.0.4.1 255.255.255.128
+no shutdown
+!
+interface gi0/1
+no shutdown
+!
+interface gi0/1.100
+description #LIGA VLAN 100#
+encapsulation dot1q 100
+ip helper-address 10.0.4.2
+ip address 10.0.12.253 255.255.255.128
+standby 100 ip 10.0.12.254
+  standby 100 priority 90
+  standby 100 preempt
+!
+interface gi0/1.10
+description #LIGA VLAN 10#
+encapsulation dot1q 10
+ip helper-address 10.0.4.2
+ip address 10.0.13.253 255.255.255.128
+standby 10 ip 10.0.13.254
+  standby 10 priority 90
+  standby 10 preempt
+!
+interface gi0/1.20
+description #LIGA VLAN 20#
+encapsulation dot1q 20
+ip helper-address 10.0.4.2
+ip address 10.0.14.125 255.255.255.128
+standby 20 ip 10.0.14.126
+  standby 20 priority 90
+  standby 20 preempt
+!
+interface gi0/1.30
+description #LIGA VLAN 30#
+encapsulation dot1q 30
+ip helper-address 10.0.4.2
+ip address 10.0.14.253 255.255.255.128
+standby 30 ip 10.0.14.254
+  standby 30 priority 90
+  standby 30 preempt
+no shutdown
+!
+interface gi0/2
+ip address 10.0.3.130 255.255.255.128
+no shutdown
+!
+interface gi0/0/0
+ip address 10.0.5.253 255.255.255.128
+no shutdown
+!
+interface gi0/1/0
+ip address 10.0.6.125 255.255.255.128
+no shutdown
+!
+!
+router ospf 100 
+router-id 3.3.3.3  
+area 1 stub
+area 2 stub no-summary
+network 10.0.4.0 0.0.0.255 area 0
+network 10.0.5.128 0.0.0.255 area 0
+network 10.0.6.0 0.0.0.255 area 0
+network 10.0.12.128 0.0.0.255 area 1
+network 10.0.13.128 0.0.0.255 area 1
+network 10.0.14.0 0.0.0.255 area 1
+network 10.0.14.128 0.0.0.255 area 1
+network 10.0.3.128 0.0.0.255 area 2
+default-information originate
+!
+!
+banner motd #sistema privado#  # Correto: "motd" (Message of the Day)
+!
+line vty 0 4
+password jetvip
+login
+_____________________________________________________________
+hostname R2
+enable secret club
+!
+interface gi0/0
+ip address 10.0.3.129 255.255.255.128 
+no shutdown
+!
+router ospf 100 
+router-id 2.2.2.2
+area 2 stub no-summary
+network 10.0.3.128 0.0.0.255 area 2
+!
+!
+banner motd #sistema privado#  # Correto: "motd" (Message of the Day)
+!
+line vty 0 4
+password jetvip
+login
+!
+
+__________________________________________________________
+site2-sucursais
+15_vlan default 1	10.0.7.0	10.0.7.1 - 10.0.7.126	10.0.7.127
+16vlan managment 100	10.0.7.128	10.0.7.129 - 10.0.7.254	10.0.7.255
+17vlan native 99	10.0.8.0	10.0.8.1 - 10.0.8.126	10.0.8.127
+18vlan Produção 10	10.0.8.128	10.0.8.129 - 10.0.8.254	10.0.8.255
+19vlan Finanças	10.0.9.0	10.0.9.1 - 10.0.9.126	10.0.9.127
+20vlan 30 Recurso	10.0.9.128	10.0.9.129 - 10.0.9.254	10.0.9.255
+
+21	10.0.10.0	10.0.10.1 - 10.0.10.126	10.0.10.127
+
+22	10.0.10.128	10.0.10.129 - 10.0.10.254	10.0.10.255
+
+
+____________________________________________________________
+hostname S7
+enable secret club
+!
+vlan 100
+name MANAGMENT
+vlan 99
+name NATIVE
+vlan 10
+name PRODUÇÃO
+vlan 20
+name FINANÇAS
+vlan 30
+name RECURSOH
+!
+interface range fa0/11-13
+switchport mode access
+switchport access vlan 10
+!
+interface range fa0/14-17
+switchport mode access
+switchport access vlan 20
+!
+interface range fa0/18-21
+switchport mode access
+switchport access vlan 30
+!
+!etherchannel
+interface range fa0/4-5
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 2 mode active
+!
+interface gi0/1
+switchport mode trunk
+!
+interface vlan 100
+ip address 10.0.7.129 255.255.255.128
+no shutdown
+!
+ip default-gateway 10.0.7.254
+!
+banner motd #sistema privado#
+!
+line vty 0 4
+password jetvip
+login
+
+____________________________________________
+hostname S6
+enable secret club
+!
+vlan 100
+name MANAGMENT
+vlan 99
+name NATIVE
+vlan 10
+name PRODUÇÃO
+vlan 20
+name FINANÇAS
+vlan 30
+name RECURSOH
+!
+interface range fa0/11-13
+switchport mode access
+switchport access vlan 10
+!
+interface range fa0/14-17
+switchport mode access
+switchport access vlan 20
+!
+interface range fa0/18-21
+switchport mode access
+switchport access vlan 30
+!
+!etherchannel
+interface range fa0/4-5
+switchport mode trunk
+switchport trunk native vlan 99
+channel-group 3 mode active
+!
+interface gi0/1
+switchport mode trunk
+!
+interface vlan 100
+ip address 10.0.7.130 255.255.255.128
+no shutdown
+!
+ip default-gateway 10.0.7.254
+!
+banner motd #sistema privado#
+!
+line vty 0 4
+password jetvip
+login
+__________________________________________________
+hostname R3
+enable secret club
+!
+ip dhcp pool VLAN100-128
+network 10.0.7.128 255.255.255.128
+default-router 10.0.10.254
+dns-server 
+!
+ip dhcp pool VLAN10-128
+network 10.0.8.128 255.255.255.128
+default-router 10.0.10.254 
+dns-server 
+domain-name produção.com
+!
+ip dhcp pool VLAN20-0
+network 10.0.9.0 255.255.255.128
+default-router 10.0.10.254
+dns-server 10.0.1.42
+domain-name finanças.com
+!
+ip dhcp pool VLAN30-128
+network 10.0.9.128 255.255.255.128
+default-router 10.0.10.254
+dns-server 10.0.1.42
+domain-name recursos.com
+!
+interface gi0/1
+no shutdown
+!
+interface gi0/1.100
+description #LIGA VLAN 100#
+encapsulation dot1q 100
+ip helper-address 10.0.10.254
+ip address 10.0.7.252 255.255.255.128
+!
+interface gi0/1.10
+description #LIGA VLAN 10#
+encapsulation dot1q 10 
+ip helper-address 10.0.10.254
+ip address 10.0.8.252 255.255.255.128
+!
+interface gi0/1.20
+description #LIGA VLAN 20#
+encapsulation dot1q 20
+ip helper-address 10.0.10.254
+ip address 10.0.9.124 255.255.255.128
+!
+interface gi0/1.30
+description #LIGA VLAN 30#
+encapsulation dot1q 30
+ip helper-address 10.0.10.254
+ip address 10.0.9.252 255.255.255.128
+no shutdown
+!
+interface gi0/2
+no shutdown
+!
+interface gi0/2.100
+description #LIGA VLAN 100#
+encapsulation dot1q 100
+ip helper-address 10.0.10.254
+ip address 10.0.7.253 255.255.255.128
+!
+interface gi0/2.10
+description #LIGA VLAN 10#
+encapsulation dot1q 10 
+ip helper-address 10.0.10.254
+ip address 10.0.8.253 255.255.255.128
+!
+interface gi0/2.20
+description #LIGA VLAN 20#
+encapsulation dot1q 20
+ip helper-address 10.0.10.254
+ip address 10.0.9.125 255.255.255.128
+!
+interface gi0/2.30
+description #LIGA VLAN 30#
+encapsulation dot1q 30
+ip helper-address 10.0.10.254
+ip address 10.0.9.253 255.255.255.128
+no shutdown
+!
+interface gi0/0
+ip address 10.0.10.253 255.255.255.128
+no shutdown
+!
+router rip
+ version 2
+ no auto-summary
+ network 10.0.10.128
+ network 10.0.7.128
+ network 10.0.8.0
+ network 10.0.8.128
+ network 10.0.9.0
+!
+ip route 0.0.0.0 0.0.0.0 10.0.10.254
+!
+banner motd #sistema privado#
+!
+line vty 0 4
+password jetvip
+login
+______________________________________________
+
+hostname R4
+enable secret club
+username R23 password senha123  
+!
+interface gi0/0
+ip address 10.0.10.254 255.255.255.128
+no shutdown
+!
+interface serial0/0/0 
+ip address 10.0.10.125 255.255.255.128        
+encapsulation ppp
+ppp authentication chap
+no shutdown
+!
+router rip
+ version 2
+ no auto-summary
+ network 10.0.10.125
+!
+ip route 0.0.0.0 0.0.0.0 10.0.10.126
+!
+banner motd #sistema privado#
+!
+line vty 0 4
+password jetvip
+login
+
+__________________________________________
+
+hostname R22
+!
+interface gi0/1/0
+ip address 10.0.5.126 255.255.255.128
+ ip nat inside
+no shutdown
+!
+interface gi0/2/0
+ip address 10.0.5.254 255.255.255.128
+ ip nat inside
+no shutdown
+!
+interface gi0/0
+ip address 10.0.3.125 255.255.255.128
+ ip nat inside
+standby 40 ip 10.0.3.126
+  standby 40 priority 110
+  standby 40 preempt
+no shutdown
+!
+interface gi0/1
+ip address 10.0.6.254 255.255.255.128
+ ip nat inside
+no shutdown
+!
+! Configurar interfaces
+interface gi0/0/0
+ description Link para Internet (ISP)
+ ip address 100.8.8.35 255.255.255.224
+  standby 60 ip 100.8.8.36
+  standby 60 priority 110
+  standby 60 preempt
+ ip nat outside
+ no shutdown
+!
+router ospf 100 
+router-id 22.2.22.2 
+network 10.0.5.128 0.0.0.255 area 0
+network 10.0.5.0 0.0.0.255 area 0
+network 10.0.3.0 0.0.0.255 area 0
+network 10.0.6.0 0.0.0.255 area 0
+network 100.8.8.0 0.0.0.255 area 0
+network 192.168.1.0 0.0.0.255 area 0
+default-information originate
+!
+ip routing
+! Definir pool de NAT para tradução dinâmica (PAT)
+ip nat pool REDE-NAT 100.8.8.40 100.8.8.62 netmask 255.255.255.224
+!
+! Definir rede interna a ser traduzida (ACL)
+access-list 1 permit 10.0.0.0 0.0.15.255
+!
+! Configurar NAT dinâmico (PAT) com sobrecarga
+ip nat inside source list 1 pool REDE_NAT overload
+!
+! Configurar rota estática padrão para internet
+ip route 0.0.0.0 0.0.0.0 100.8.8.33
+!
+
+
+__________________________________________
+
+
+hostname R21
+!
+interface gi0/1/0
+ip address 10.0.4.254 255.255.255.128
+ip nat inside 
+no shutdown
+!
+interface gi0/2/0
+ip address 10.0.6.126 255.255.255.128
+ip nat inside 
+no shutdown
+!
+interface gi0/0
+ip address 10.0.3.124 255.255.255.128
+ standby 10 ip 10.0.3.126
+ standby 50 priority 90
+ standby 50 preempt
+ip nat inside  
+no shutdown
+!
+interface gi0/1
+ip address 10.0.11.126 255.255.255.128
+ip nat inside 
+no shutdown
+!
+interface GigabitEthernet0/0/0
+ description Link para Internet (ISP)
+ip address 100.8.8.34 255.255.255.224
+ standby 70 ip 100.8.8.36
+ standby 70 priority 90
+ standby 70 preempt
+ ip nat outside
+ no shutdown
+!
+router ospf 100 
+router-id 21.1.21.1 
+network 100.8.8.0 0.0.0.255 area 0
+network 10.0.4.128 0.0.0.255 area 0
+network 10.0.6.0 0.0.0.255 area 0
+network 10.0.3.0 0.0.0.255 area 0
+network 10.0.11.0 0.0.0.255 area 0
+network 192.168.1.0 0.0.0.255 area 0
+default-information originate
+!
+ip routing
+! Definir pool de NAT para tradução dinâmica (PAT)
+ip nat pool REDE-NAT 100.8.8.40 100.8.8.62 netmask 255.255.255.224
+!
+! Definir rede interna a ser traduzida (ACL)
+access-list 1 permit 10.0.0.0 0.0.15.255
+!
+! Configurar NAT dinâmico (PAT) com sobrecarga
+ip nat inside source list 1 pool REDE_NAT overload
+!
+! Configurar rota estática padrão para internet
+ip route 0.0.0.0 0.0.0.0 100.8.8.33
+!
+
+_____________________________________________________
+
+
+hostname R23
+username R4 password senha123  
+!
+interface gi0/0/0
+ip address 10.0.11.125 255.255.255.128
+no shutdown
+!
+interface gi0/0/1
+ip address 10.0.6.253 255.255.255.128
+no shutdown
+!
+interface serial0/1/0   
+ip address 10.0.10.126 255.255.255.128       
+encapsulation ppp
+ppp authentication chap    
+clock rate 2000000
+no shutdown
+!
+router ospf 100 
+redistribute rip subnets
+router-id 23.3.23.3 
+network 10.0.11.0 0.0.0.255 area 0
+network 10.0.6.128 0.0.0.255 area 0
+network 10.0.10.0 0.0.0.255 area 0
+!
+router rip
+ version 2
+ no auto-summary
+ redistribute ospf 1 metric 2
+ network 10.0.10.0
+ network 10.0.11.0
+ network 10.0.6.128
+!
+
+________________________________________________________
+Ro
+!
+ipv6 unicast-routing
+!
+interface gi0/1
+no shutdown
+!
+interface gi0/1.100
+ipv6 address fe80::1 link-local
+ipv6 address 2001:BEEF:AAAA::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/1.10
+ipv6 address fe80::1 link-local
+ipv6 address 2001:BEEF:BBBB::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/1.20
+ipv6 address fe80::1 link-local
+ipv6 address 2001:BEEF:CCCC::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/1.30
+ipv6 address fe80::1 link-local
+ipv6 address 2001:BEEF:DDDD::/64
+ipv6 ospf 100 area 1
+no shut
+!
+interface gi0/0
+ipv6 address fe80::1 link-local
+ipv6 address fD00::1/64
+ipv6 ospf 100 area 0
+!
+interface gi0/1/0
+ipv6 address fe80::1 link-local
+ipv6 address fD00:8::2/64
+ipv6 ospf 100 area 0
+!
+interface gi0/2/0
+ipv6 address fe80::1 link-local
+ipv6 address fD00:6::2/64
+ipv6 ospf 100 area 0
+!
+
+_______________________________________
+R1
+!
+ipv6 unicast-routing
+!
+interface gi0/1
+no shutdown
+!
+interface gi0/1.100
+ipv6 address fe80::2 link-local
+ipv6 address 2001:BEEF:AAAA:1::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/1.10
+ipv6 address fe80::2 link-local
+ipv6 address 2001:BEEF:BBBB:1::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/1.20
+ipv6 address fe80::2 link-local
+ipv6 address 2001:BEEF:CCCC:1::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/1.30
+ipv6 address fe80::2 link-local
+ipv6 address 2001:BEEF:DDDD:1::/64
+ipv6 ospf 100 area 1
+no shut
+!
+interface gi0/0
+ipv6 address fe80::2 link-local
+ipv6 address fD00::2/64
+ipv6 ospf 100 area 0
+!
+interface gi0/2
+ipv6 address fe80::2 link-local
+ipv6 address fD00:1::2/64
+ipv6 ospf 100 area 2
+!
+interface gi0/0/0
+ipv6 address fe80::2 link-local
+ipv6 address fD00:9::2/64
+ipv6 ospf 100 area 0
+!
+interface gi0/1/0
+ipv6 address fe80::2 link-local
+ipv6 address fD00:7::2/64
+ipv6 ospf 100 area 0
+!
+___________________________________
+R2
+!
+ipv6 unicast-routing
+!
+interface gi0/0
+ipv6 address fe80::3 link-local
+ipv6 address fD00:1::1/64
+ipv6 ospf 100 area 2
+!
+_______________________________________
+R3
+!
+ipv6 unicast-routing
+!
+interface gi0/1
+no shutdown
+!
+interface gi0/1.100
+ipv6 address fe80::4 link-local
+ipv6 address 2001:BEEF:AAAA:2::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/1.10
+ipv6 address fe80::4 link-local
+ipv6 address 2001:BEEF:BBBB:2::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/1.20
+ipv6 address fe80::4 link-local
+ipv6 address 2001:BEEF:CCCC:2::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/1.30
+ipv6 address fe80::4 link-local
+ipv6 address 2001:BEEF:DDDD:2::/64
+ipv6 ospf 100 area 1
+no shut
+!
+interface gi0/2
+no shutdown
+!
+interface gi0/2.100
+ipv6 address fe80::4 link-local
+ipv6 address 2001:BEEF:AAAA:3::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/2.10
+ipv6 address fe80::4 link-local
+ipv6 address 2001:BEEF:BBBB:3::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/2.20
+ipv6 address fe80::4 link-local
+ipv6 address 2001:BEEF:CCCC:3::/64
+ipv6 ospf 100 area 1
+!
+interface gi0/2.30
+ipv6 address fe80::4 link-local
+ipv6 address 2001:BEEF:DDDD:4::/64
+ipv6 ospf 100 area 1
+no shut
+!
+interface gi0/0
+ipv6 address fe80::4 link-local
+ipv6 address fD00:2::2/64
+ipv6 ospf 100 area 1
+!
+____________________________________________
+R4
+!
+ipv6 unicast-routing
+!
+interface gi0/0
+ipv6 address fe80::5 link-local
+ipv6 address fD00:2::1/64
+ipv6 ospf 100 area 1
+!
+interface se0/0/0
+ipv6 address fe80::5 link-local
+ipv6 address fD00:3::2/64
+ipv6 ospf 100 area 0
+!
+___________________________________________
+R23
+!
+ipv6 unicast-routing
+!
+interface gi0/0/0
+ipv6 address fe80::6 link-local
+ipv6 address fD00:4::2/64
+ipv6 ospf 100 area 0
+!
+interface gi0/0/1
+ipv6 address fe80::6 link-local
+ipv6 address fD00:5::2/64
+ipv6 ospf 100 area 0
+!
+interface se0/1/0
+ipv6 address fe80::6 link-local
+ipv6 address fD00:3::1/64
+ipv6 ospf 100 area 0
+!
+___________________________________________
+R21
+!
+ipv6 unicast-routing
+!
+interface gi0/1
+ipv6 address fe80::7 link-local
+ipv6 address fD00:4::1/64
+ipv6 ospf 100 area 0
+!
+interface gi0/1/0
+ipv6 address fe80::7 link-local
+ipv6 address fD00:6::1/64
+ipv6 ospf 100 area 0
+!
+interface gi0/2/0
+ipv6 address fe80::7 link-local
+ipv6 address fD00:7::1/64
+ipv6 ospf 100 area 0
+!
+
+___________________________________________
+R22
+!
+ipv6 unicast-routing
+!
+interface gi0/1
+ipv6 address fe80::8 link-local
+ipv6 address fD00:5::1/64
+ipv6 ospf 100 area 0
+!
+!
+interface gi0/1/0
+ipv6 address fe80::8 link-local
+ipv6 address fD00:8::1/64
+ipv6 ospf 100 area 0
+!
+interface gi0/2/0
+ipv6 address fe80::8 link-local
+ipv6 address fD00:9::1/64
+ipv6 ospf 100 area 0
+!
+!
+R21
+interface s0/3/0
+ encapsulation frame-relay ietf
+ frame-relay lmi-type q933a
+ no shutdown
+!
+interface s0/3/0.106 point-to-point
+ description *LIGA A R7 E R6*
+ ip address 192.168.1.1 255.255.255.224
+ frame-relay interface-dlci 106
+!
+interface s0/3/0.107 point-to-point
+ description *LIGA A R7 E R8*
+ ip address 192.168.1.33 255.255.255.224
+ frame-relay interface-dlci 107
+!
+R22
+interface s0/3/0
+ encapsulation frame-relay ietf
+ frame-relay lmi-type q933a
+ no shutdown
+!
+interface s0/3/0.106 point-to-point
+ description *LIGA A R7 E R6*
+ ip address 192.168.1.1 255.255.255.224
+ frame-relay interface-dlci 106
+!
+interface s0/3/0.107 point-to-point
+ description *LIGA A R7 E R8*
+ ip address 192.168.1.33 255.255.255.224
+ frame-relay interface-dlci 107
+!
+
+
+!
+R11
+interface s0/3/0
+ encapsulation frame-relay ietf
+ frame-relay lmi-type q933a
+ no shutdown
+!
+interface s0/3/0.601 point-to-point
+ description *LIGA A MULTIUSER*
+ ip address 192.168.1.2 255.255.255.224
+ frame-relay interface-dlci 601
+!
+interface s0/3/0.701 point-to-point
+ description *LIGA A MULTI A MULTIUSER*
+ ip address 192.168.1.34 255.255.255.224
+ frame-relay interface-dlci 701
+!
+
+
+R12
+interface s0/3/0
+ encapsulation frame-relay ietf
+ frame-relay lmi-type q933a
+ no shutdown
+!
+interface s0/3/0.701 point-to-point
+ description *LIGA A MULTI A MULTIUSER*
+ ip address 192.168.1.34 255.255.255.224
+ frame-relay interface-dlci 701
+!
+interface s0/3/0.601 point-to-point
+ description *LIGA A MULTIUSER*
+ ip address 192.168.1.2 255.255.255.224
+ frame-relay interface-dlci 601
+!
+
+

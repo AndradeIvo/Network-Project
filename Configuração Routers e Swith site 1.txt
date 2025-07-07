@@ -1,0 +1,1072 @@
+-----------------------------------------------------------------------
+                               CONFIGURAÇÃO GERAL
+------------------------------------------------------------------------
+hostname R1
+!
+! VLAN 10 - VENDAS
+interface g0/2.10
+ encapsulation dot1Q 10
+ ip address 10.0.0.3 255.255.255.240
+ standby 10 ip 10.0.0.1
+ standby 10 priority 110
+ standby 10 preempt
+!
+! VLAN 20 - MARKETING
+interface g0/2.20
+ encapsulation dot1Q 20
+ ip address 10.0.0.19 255.255.255.240
+ standby 20 ip 10.0.0.17
+ standby 20 priority 110
+ standby 20 preempt
+!
+! VLAN 30 - RH
+interface g0/2.30
+ encapsulation dot1Q 30
+ ip address 10.0.0.35 255.255.255.240
+ standby 30 ip 10.0.0.33
+ standby 30 priority 110
+ standby 30 preempt
+!
+! VLAN 100 - MANAGEMENT
+interface g0/2.100
+ encapsulation dot1Q 100
+ ip address 10.0.0.51 255.255.255.240
+ standby 100 ip 10.0.0.49
+ standby 100 priority 110
+ standby 100 preempt
+!
+! Interface física ativa
+interface gi0/2
+ ip address 10.0.0.110 255.255.255.240
+ no shut
+!
+! DHCP Pools correspondentes às sub-redes
+ip dhcp pool VENDAS
+ network 10.0.0.0 255.255.255.240
+ default-router 10.0.0.1
+ dns-server 10.0.1.42
+
+ip dhcp pool MARKETING
+ network 10.0.0.16 255.255.255.240
+ default-router 10.0.0.17
+ dns-server 10.0.1.42
+
+ip dhcp pool RH
+ network 10.0.0.32 255.255.255.240
+ default-router 10.0.0.33
+ dns-server 10.0.1.42
+
+ip dhcp pool MANAGEMENT
+ network 10.0.0.48 255.255.255.240
+ default-router 10.0.0.49
+ dns-server 10.0.1.42
+
+!
+! IPs excluidos da distribuição do DHCP - reservado para os routers
+ip dhcp excluded-address 10.0.0.1 10.0.0.4
+ip dhcp excluded-address 10.0.0.17 10.0.0.19
+ip dhcp excluded-address 10.0.0.33 10.0.0.35
+ip dhcp excluded-address 10.0.0.49 10.0.0.51
+!
+!
+interface gi0/0
+ ip address 10.0.0.77 255.255.255.240 
+ no shut
+interface gi0/1
+ ip address 10.0.0.93 255.255.255.240
+ no shut
+interface gi0/3/0
+ ip address 10.0.0.253 255.255.255.240
+ no shut
+interface gi0/2/0
+ ip address 10.0.0.205 255.255.255.240
+ no shut
+!
+router ospf 100
+ router-id 1.1.1.1
+ auto-cost reference-bandwidth 1000
+ area 2 range 10.0.0.0 255.255.255.128
+ area 1 range 10.0.0.0 255.255.255.128
+ area 2 stub
+ network 10.0.0.77 0.0.0.0 area 2
+ network 10.0.0.110 0.0.0.0 area 1
+ network 10.0.0.93 0.0.0.0 area 0
+ network 10.0.0.253 0.0.0.0 area 0
+ network 10.0.0.205 0.0.0.0 area 0
+!
+ip route 0.0.0.0 0.0.0.0 10.0.0.206 1
+ip route 0.0.0.0 0.0.0.0 10.0.0.254 10
+!
+! Cria lista de acesso permitindo PC14(ADMIN) aceder a telnet
+ip access-list extended TELNET-ADMIN
+ permit tcp host 10.0.0.56 any eq 23
+ deny   tcp any any eq 23
+ permit ip any any
+line vty 0 4
+ access-class TELNET-ADMIN in
+ login
+ password cisco
+
+----------------------------------------------------------------------------------------------
+!R2
+!
+hostname R2
+interface gi0/0
+ ip address 10.0.0.78 255.255.255.240
+ no shut
+router ospf 100
+ router-id 2.2.2.2
+ auto-cost reference-bandwidth 1000
+ area 2 stub 
+ network 10.0.0.78 0.0.0.0 area 2
+----------------------------------------------------------------------------------------------
+!R10
+!
+hostname R10
+!
+! VLAN 10 - VENDAS
+interface g0/1.10
+ encapsulation dot1Q 10
+ ip address 10.0.0.2 255.255.255.240
+ standby 10 ip 10.0.0.1
+ standby 10 priority 100
+ standby 10 preempt
+!
+! VLAN 20 - MARKETING
+interface g0/1.20
+ encapsulation dot1Q 20
+ ip address 10.0.0.18 255.255.255.240
+ standby 20 ip 10.0.0.17
+ standby 20 priority 100
+ standby 20 preempt
+!
+! VLAN 30 - RH
+interface g0/1.30
+ encapsulation dot1Q 30
+ ip address 10.0.0.34 255.255.255.240
+ standby 30 ip 10.0.0.33
+ standby 30 priority 100
+ standby 30 preempt
+!
+! VLAN 100 - MANAGEMENT
+interface g0/1.100
+ encapsulation dot1Q 100
+ ip address 10.0.0.50 255.255.255.240
+ standby 100 ip 10.0.0.49
+ standby 100 priority 100
+ standby 100 preempt
+!
+!
+! DHCP Pools correspondentes às sub-redes
+ip dhcp pool VENDAS
+ network 10.0.0.0 255.255.255.240
+ default-router 10.0.0.1
+ dns-server 10.0.1.42
+
+ip dhcp pool MARKETING
+ network 10.0.0.16 255.255.255.240
+ default-router 10.0.0.17
+ dns-server 10.0.1.42
+
+ip dhcp pool RH
+ network 10.0.0.32 255.255.255.240
+ default-router 10.0.0.33
+ dns-server 10.0.1.42
+
+ip dhcp pool MANAGEMENT
+ network 10.0.0.48 255.255.255.240
+ default-router 10.0.0.49
+ dns-server 10.0.1.42
+!
+! IPs excluidos da distribuição do DHCP - reservado para os routers
+ip dhcp excluded-address 10.0.0.1 10.0.0.3
+ip dhcp excluded-address 10.0.0.17 10.0.0.19
+ip dhcp excluded-address 10.0.0.33 10.0.0.35
+ip dhcp excluded-address 10.0.0.49 10.0.0.51
+!
+!
+interface gi0/0
+ ip address 10.0.0.94 255.255.255.240
+ no shut
+interface gi0/1
+ ip address 10.0.0.109 255.255.255.240
+ no shut
+interface gi0/1/0
+ ip address 10.0.0.221 255.255.255.240
+ no shut
+interface gi0/2/0
+ ip address 10.0.0.237 255.255.255.240
+ no shut
+router ospf 100
+ router-id 10.10.10.10
+ auto-cost reference-bandwidth 1000
+ network 10.0.0.109 0.0.0.0 area 1
+ network 10.0.0.94 0.0.0.0 area 0
+ network 10.0.0.221 0.0.0.0 area 0
+ network 10.0.0.237 0.0.0.0 area 0
+!
+!prioriza a rota .222 que é para o router 12
+! ao fazer "sh ip route", aparece somente a rota ativa, e o back não aparece
+no ip route 0.0.0.0 0.0.0.0 10.0.0.222 
+no ip route 0.0.0.0 0.0.0.0 10.0.0.238 
+!
+! Cria lista de acesso permitindo PC14(ADMIN) aceder a telnet
+ip access-list extended TELNET-ADMIN
+ permit tcp host 10.0.0.56 any eq 23
+ deny   tcp any any eq 23
+ permit ip any any
+line vty 0 4
+ access-class TELNET-ADMIN in
+ login
+ password cisco
+
+----------------------------------------------------------------------------------------------
+!R11
+!
+hostname R11
+interface gi0/2/0
+ ip address 10.0.0.254 255.255.255.240
+ ip nat inside
+ no shut
+interface gi0/1/0
+ ip address 10.0.0.238 255.255.255.240
+ ip nat inside
+ no shut
+interface gi0/1
+ ip address 10.0.1.13 255.255.255.240
+ ip nat inside
+ no shut
+interface gi0/0/0
+ ip address 100.8.8.2 255.255.255.224
+ ip nat outside
+ standby 1 ip 100.8.8.4
+ standby 1 priority 100
+ standby 1 preempt
+ no shut
+interface gi0/0
+ ip address 10.0.1.46 255.255.255.240
+ standby 2 ip 10.0.1.44
+ standby 2 priority 100
+ standby preempt 
+ ip nat inside
+ no shut
+!
+!
+!Cria uma pool de endereços públicos
+ip nat pool REDE_NAT 100.8.8.8 100.8.8.30 netmask 255.255.255.224
+!
+! Rede interna a ser traduzida
+access-list 1 permit 10.0.0.0 0.0.15.255
+!
+! Utiliza NAT dinâmico (PAT)
+ip nat inside source list 1 pool REDE_NAT overload
+!
+! Tradução dos portos dos servidores DMZ! WWW (port 80)
+ip nat inside source static tcp 10.0.1.43 80 100.8.8.5 80
+!
+!DNS (Port 53 UDP e TCP)
+ip nat inside source static udp 10.0.1.42 53 100.8.8.6 53
+ip nat inside source static tcp 10.0.1.42 53 100.8.8.6 53
+!
+!EMAIL (SMPT- port 25, POP3 - port 110)
+ip nat inside source static tcp 10.0.1.41 25 100.8.8.12 25
+ip nat inside source static tcp 10.0.1.41 110 100.8.8.12 110
+! rota estática para internet
+ip route 0.0.0.0 0.0.0.0 100.8.8.1
+!
+!
+router ospf 100
+ router-id 11.11.11.11
+ auto-cost reference-bandwidth 1000
+ network 10.0.0.254 0.0.0.0 area 0
+ network 10.0.0.238 0.0.0.0 area 0
+ network 10.0.1.13 0.0.0.0 area 0
+ network 10.0.1.46 0.0.0.0 area 0
+!
+! divulga a rota por omissão através do OSPF
+default-information originate
+!
+! Frame-Relay
+interface s0/3/0
+encapsulation frame-relay ietf
+frame-relay lmi-type q933a
+no shut
+bandwidth 4000
+interface s0/3/0.701 point-to-point
+ description #LIGA A R22#
+ip address 192.168.1.34 255.255.255.224
+frame-relay interface-dlci 701
+!
+interface s0/3/0.601 point-to-point
+ description #LIGA A R21#
+ip address 192.168.1.2 255.255.255.224
+frame-relay interface-dlci 601
+
+
+----------------------------------------------------------------------------------------------
+!R12
+!
+hostname R12
+interface gi0/2/0
+ ip address 10.0.0.206 255.255.255.240
+ ip nat inside
+ no shut
+interface gi0/1/0
+ ip address 10.0.0.222 255.255.255.240
+ ip nat inside
+ no shut
+interface gi0/1
+ ip address 10.0.1.29 255.255.255.240
+ ip nat inside
+ no shut
+interface gi0/0/0
+ ip address 100.8.8.3 255.255.255.224
+ ip nat outside
+ standby 1 ip 100.8.8.4
+ standby 1 priority 110
+ standby 1 preempt
+ip access-group BLOQUEIO-POTEDEMEL out
+ no shut
+!
+!Cria uma pool de endereços públicos
+ip nat pool REDE_NAT 100.8.8.8 100.8.8.30 netmask 255.255.255.224
+!
+! Rede interna a ser traduzida
+access-list 1 permit 10.0.0.0 0.0.15.255
+!
+! Utiliza NAT dinâmico (PAT)
+ip nat inside source list 1 pool REDE_NAT overload
+!
+! Tradução dos portos dos servidores DMZ! WWW (port 80)
+ip nat inside source static tcp 10.0.1.43 80 100.8.8.5 80
+!
+!DNS (Port 53 UDP e TCP)
+ip nat inside source static udp 10.0.1.42 53 100.8.8.6 53
+ip nat inside source static tcp 10.0.1.42 53 100.8.8.6 53
+!
+!EMAIL (SMTP- port 25, POP3 - port 110)
+ip nat inside source static tcp 10.0.1.41 25 100.8.8.12 25
+ip nat inside source static tcp 10.0.1.41 110 100.8.8.12 110
+! rota estática para internet
+ip route 0.0.0.0 0.0.0.0 100.8.8.1
+!
+interface gi0/0
+ ip address 10.0.1.45 255.255.255.240
+ standby 2 ip 10.0.1.44
+ standby 2 priority 110
+ standby 2 preempt
+ ip nat inside
+ no shut
+!
+router ospf 100
+ router-id 12.12.12.12
+ auto-cost reference-bandwidth 1000
+ network 10.0.0.222 0.0.0.0 area 0
+ network 10.0.0.206 0.0.0.0 area 0
+ network  10.0.1.29 0.0.0.0 area 0
+ network 10.0.1.45 0.0.0.0 area 0 
+!
+! divulga a rota por omissão através do OSPF
+default-information originate
+!
+ip access-list extended BLOQUEIO-POTEDEMEL
+ deny ip any host 198.0.0.1
+ permit ip any any
+!
+! Frame-Relay
+interface s0/3/0
+encapsulation frame-relay ietf
+frame-relay lmi-type q933a
+no shut
+bandwidth 4000
+interface s0/3/0.601 point-to-point
+ description #LIGA A R21#
+ip address 192.168.1.2 255.255.255.224
+frame-relay interface-dlci 601
+!
+interface s0/3/0.701 point-to-point
+ description #LIGA A R22#
+ip address 192.168.1.34 255.255.255.224
+frame-relay interface-dlci 701
+
+----------------------------------------------------------------------------------------------
+!
+!R14
+username R13 password 123
+hostname R14
+interface se0/0/0
+ ip address 10.0.1.61 255.255.255.240
+ encapsulation ppp
+ ppp authentication pap
+ ppp pap sent-username R14 password 123
+ no shut
+interface gi0/0
+ ip address 10.0.0.125 255.255.255.240
+ no shut
+router rip 
+ version 2
+ no auto-summary
+ network 10.0.0.0
+!
+!R14 (Servidor) PAP
+!
+-------------------------------------------------------------------------------------------------
+!
+!R13
+username R14 password 123
+hostname R13
+interface gi0/0/0
+ ip address 10.0.1.14 255.255.255.240
+ no shut
+interface gi0/0/1
+ ip address 10.0.1.30 255.255.255.240
+ no shut
+interface se0/1/0
+ ip address 10.0.1.62 255.255.255.240
+ encapsulation ppp
+ ppp authentication pap
+ ppp pap sent-username R13 password 123
+ no shut
+router ospf 100
+ router-id 13.13.13.13
+ auto-cost reference-bandwidth 1000
+ redistribute rip subnets
+ network 10.0.1.14 0.0.0.0 area 0
+ network 10.0.1.30 0.0.0.0 area 0
+router rip 
+ version 2
+ no auto-summary
+ redistribute ospf 100 metric 1
+ network 10.0.0.0
+-----------------------------------------------------------------------------------------------------
+!
+!R3
+hostname R3
+interface gi0/0
+ ip address 10.0.0.126 255.255.255.240
+ no shut
+!
+router rip
+ version 2
+ no auto-summary
+ network 10.0.0.0
+!
+! VLAN 10 - VENDAS
+interface gi0/1.10
+ encapsulation dot1Q 10
+ ip address 10.0.0.129 255.255.255.240
+!
+! VLAN 20 - MARKETING
+interface gi0/1.20
+ encapsulation dot1Q 20
+ ip address 10.0.0.145 255.255.255.240
+!
+! VLAN 30 - RH
+interface gi0/1.30
+ encapsulation dot1Q 30
+ ip address 10.0.0.161 255.255.255.240
+!
+! VLAN 100 - MANAGEMENT
+interface gi0/1.100
+ encapsulation dot1Q 100
+ ip address 10.0.0.177 255.255.255.240
+!
+! Interface física ativa
+interface gi0/1
+ no shutdown
+!
+!DHCP Pools correspondentes às sub-redes
+ip dhcp pool VENDAS
+ network 10.0.0.128 255.255.255.240
+ default-router 10.0.0.129
+ dns-server 10.0.1.42
+
+ip dhcp pool MARKETING
+ network 10.0.0.144 255.255.255.240
+ default-router 10.0.0.145
+ dns-server 10.0.1.42
+
+ip dhcp pool RH
+ network 10.0.0.160 255.255.255.240
+ default-router 10.0.0.161
+ dns-server 10.0.1.42
+
+ip dhcp pool MANAGEMENT
+ network 10.0.0.176 255.255.255.240
+ default-router 10.0.0.177
+ dns-server 10.0.1.42
+!
+! IPs excluidos da distribuição do DHCP - reservado para os routers
+ip dhcp excluded-address 10.0.0.129 
+ip dhcp excluded-address 10.0.0.145
+ip dhcp excluded-address 10.0.0.161
+ip dhcp excluded-address 10.0.0.177
+!
+ip route 0.0.0.0 0.0.0.0 10.0.0.125
+!
+! Cria lista de acesso permitindo PC14(ADMIN) aceder a telnet
+ip access-list extended TELNET-ADMIN
+ permit tcp host 10.0.0.56 any eq 23
+ deny   tcp any any eq 23
+ permit ip any any
+line vty 0 4
+ access-class TELNET-ADMIN in
+ login
+ password cisco
+
+-----------------------------------------------------------------------------------------------
+Incluir os endereços das subredes das subinterfaces na área 1 do OSPF para que possam ser anunciadas: Aplicar no R1
+
+network 10.0.0.0 0.0.0.15 area 1
+network 10.0.0.16 0.0.0.15 area 1
+network 10.0.0.32 0.0.0.15 area 1
+network 10.0.0.48 0.0.0.15 area 1
+
+
+passive interface < >
+para evitar colisão de vizinhos repetidos em mais de uma interface
+
+---------------------------------------------------------------------------------------------------------
+SWITCH 1
+
+hostname s1
+!
+! VLANS
+ vlan 10
+ name VENDAS
+vlan 20
+ name MARKETING
+vlan 30
+ name RH
+vlan 99
+ name NATIVE
+vlan 100
+ name MANAGEMENT
+!
+interface gi0/1
+ switchport mode trunk
+ switchport trunk native vlan 99
+!
+! ETHERCHANNEL 1
+Interface range fa0/19 - 20
+ switchport mode trunk
+ switchport trunk native vlan 99
+ channel-group 1 mode active
+!
+! ETHERCHANNEL 1 COMO TRUNK
+interface port-channel 1
+ switchport mode trunk
+ switchport trunk native vlan 99    
+!
+! ETHERCHANNEL 2
+Interface range fa0/21 - 22
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 2 mode active
+!
+! ETHERCHANNEL 2 COMO TRUNK
+interface port-channel 2
+ switchport mode trunk
+ switchport trunk native vlan 99  
+!
+! ETHERCHANNEL 3
+Interface range fa0/23 - 24
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 3 mode active
+!
+! ETHERCHANNEL 3 COMO TRUNK
+interface port-channel 3
+ switchport mode trunk
+ switchport trunk native vlan 99 
+!
+! PORTAS DOS VLANS
+interface range fa0/1 - 5
+ switchport mode access
+ switchport access vlan 10 
+
+interface range fa0/6 - 10
+ switchport mode access 
+ switchport access vlan 20
+
+interface range fa0/11 - 15
+ switchport mode access
+ switchport access vlan 30
+!
+! VLAN MANAGEMENT
+interface vlan 100
+ ip address 10.0.0.50 255.255.255.240
+ no shutdown 
+!
+! Gateway padrão da rede de gerenciamento
+ip default-gateway 10.0.0.49
+!
+! Cria lista de acesso permitindo PC14(ADMIN) aceder a telnet
+ip access-list extended TELNET-ADMIN
+ permit tcp host 10.0.0.56 any eq 23
+ deny   tcp any any eq 23
+ permit ip any any
+line vty 0 4
+ access-class TELNET-ADMIN in
+ login
+ password cisco
+
+---------------------------------------------------------------------------------------------------
+ SWITCH 2
+
+hostname s2
+!
+! VLANS
+ vlan 10
+ name VENDAS
+vlan 20
+ name MARKETING
+vlan 30
+ name RH
+vlan 99
+ name NATIVE
+vlan 100
+ name MANAGEMENT
+!
+interface gi0/1
+ switchport mode trunk
+ switchport trunk native vlan 99
+!
+! ETHERCHANNEL 1
+Interface range fa0/21 - 22
+ switchport mode trunk
+ switchport trunk native vlan 99
+ channel-group 1 mode active
+!
+! ETHERCHANNEL 1 COMO TRUNK
+interface port-channel 1
+ switchport mode trunk
+ switchport trunk native vlan 99
+!
+! ETHERCHANNEL 2
+Interface range fa0/19 - 20
+ switchport mode trunk
+ switchport trunk native vlan 99  
+ channel-group 2 mode active
+!
+! ETHERCHANNEL 2 COMO TRUNK
+interface port-channel 2
+ switchport mode trunk
+ switchport trunk native vlan 99  
+!
+! ETHERCHANNEL 3
+Interface range fa0/23 - 24
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 3 mode active
+!
+! ETHERCHANNEL 3 COMO TRUNK
+interface port-channel 3
+ switchport mode trunk
+ switchport trunk native vlan 99  
+!
+! PORTAS DOS VLANS
+interface range fa0/1 - 5
+ switchport mode access
+ switchport access vlan 10 
+
+interface range fa0/6 - 10
+ switchport mode access 
+ switchport access vlan 20
+
+interface range fa0/11 - 15
+ switchport mode access
+ switchport access vlan 30
+!
+! VLAN MANAGEMENT
+interface vlan 100
+ ip address 10.0.0.51 255.255.255.240
+ no shutdown 
+!
+! Gateway padrão da rede de gerenciamento Router 1
+ip default-gateway 10.0.0.49
+!
+! Cria lista de acesso permitindo PC14(ADMIN) aceder a telnet
+ip access-list extended TELNET-ADMIN
+ permit tcp host 10.0.0.56 any eq 23
+ deny   tcp any any eq 23
+ permit ip any any
+line vty 0 4
+ access-class TELNET-ADMIN in
+ login
+ password cisco
+
+---------------------------------------------------------------------------------------------------
+ SWITCH 3
+
+hostname s3
+!
+! VLANS
+ vlan 10
+ name VENDAS
+vlan 20
+ name MARKETING
+vlan 30
+ name RH
+vlan 99
+ name NATIVE
+vlan 100
+ name MANAGEMENT
+!
+! ETHERCHANNEL 1
+Interface range fa0/23 - 24
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 1 mode active
+!
+! ETHERCHANNEL 1 COMO TRUNK
+interface port-channel 1
+ switchport mode trunk
+ switchport trunk native vlan 99   
+!
+! ETHERCHANNEL 2
+Interface range fa0/19 - 20
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 2 mode active
+!
+! ETHERCHANNEL 2 COMO TRUNK
+interface port-channel 2
+ switchport mode trunk
+ switchport trunk native vlan 99    
+!
+! ETHERCHANNEL 3
+Interface range fa0/21 - 22
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 3 mode active
+!
+! ETHERCHANNEL 3 COMO TRUNK
+interface port-channel 3
+ switchport mode trunk
+ switchport trunk native vlan 99   
+!
+! PORTAS DOS VLANS
+interface range fa0/1 - 5
+ switchport mode access
+ switchport access vlan 10 
+
+interface range fa0/6 - 10
+ switchport mode access 
+ switchport access vlan 20
+
+interface range fa0/11 - 15
+ switchport mode access
+ switchport access vlan 30
+!
+!Atribuição da porta do PC do admin ao VLAN do management
+interface fa0/18
+ switchport mode access
+ switchport access vlan 100
+!
+! VLAN MANAGEMENT
+interface vlan 100
+ ip address 10.0.0.52 255.255.255.240
+ no shutdown 
+!
+! Gateway padrão da rede de gerenciamento Router 1
+ip default-gateway 10.0.0.49
+!
+! Cria lista de acesso permitindo PC14(ADMIN) aceder a telnet
+ip access-list extended TELNET-ADMIN
+ permit tcp host 10.0.0.56 any eq 23
+ deny   tcp any any eq 23
+ permit ip any any
+line vty 0 4
+ access-class TELNET-ADMIN in
+ login
+ password cisco
+
+---------------------------------------------------------------------------------------------------
+ SWITCH 4
+
+hostname s4
+!
+! VLANS
+ vlan 10
+ name VENDAS
+vlan 20
+ name MARKETING
+vlan 30
+ name RH
+vlan 99
+ name NATIVE
+vlan 100
+ name MANAGEMENT
+!
+! ETHERCHANNEL 1
+Interface range fa0/17 - 18
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 1 mode active
+!
+! ETHERCHANNEL 1 COMO TRUNK
+interface port-channel 1
+ switchport mode trunk
+ switchport trunk native vlan 99   
+!
+! ETHERCHANNEL 2
+Interface range fa0/19 - 20
+ switchport mode trunk
+ switchport trunk native vlan 99   
+ channel-group 2 mode active
+!
+! ETHERCHANNEL 2 COMO TRUNK
+interface port-channel 2
+ switchport mode trunk
+ switchport trunk native vlan 99    
+!
+! ETHERCHANNEL 3
+Interface range fa0/23 - 24
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 3 mode active
+!
+! ETHERCHANNEL 3 COMO TRUNK
+interface port-channel 3
+ switchport mode trunk
+ switchport trunk native vlan 99     
+!
+! ETHERCHANNEL 4
+Interface range fa0/21 - 22
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 4 mode active
+!
+! ETHERCHANNEL 4 COMO TRUNK
+interface port-channel 4
+ switchport mode trunk
+ switchport trunk native vlan 99  
+!
+! PORTAS DOS VLANS
+interface range fa0/1 - 5
+ switchport mode access
+ switchport access vlan 10 
+
+interface range fa0/6 - 10
+ switchport mode access 
+ switchport access vlan 20
+
+interface range fa0/11 - 15
+ switchport mode access
+ switchport access vlan 30
+!
+! VLAN MANAGEMENT
+interface vlan 100
+ ip address 10.0.0.53 255.255.255.240
+ no shutdown 
+!
+! Gateway padrão da rede de gerenciamento Router 1
+ip default-gateway 10.0.0.49
+!
+! Cria lista de acesso permitindo PC14(ADMIN) aceder a telnet
+ip access-list extended TELNET-ADMIN
+ permit tcp host 10.0.0.56 any eq 23
+ deny   tcp any any eq 23
+ permit ip any any
+line vty 0 4
+ access-class TELNET-ADMIN in
+ login
+ password cisco
+
+---------------------------------------------------------------------------------------------------
+ SWITCH 5
+
+hostname s5
+!
+! VLANS
+ vlan 10
+ name VENDAS
+vlan 20
+ name MARKETING
+vlan 30
+ name RH
+vlan 99
+ name NATIVE
+vlan 100
+ name MANAGEMENT
+!
+! ETHERCHANNEL 1
+Interface range fa0/21 - 22
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 1 mode active
+!
+! ETHERCHANNEL 1 COMO TRUNK
+interface port-channel 1
+ switchport mode trunk
+ switchport trunk native vlan 99    
+!
+! ETHERCHANNEL 2
+Interface range fa0/19 - 20
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 2 mode active
+!
+! ETHERCHANNEL 2 COMO TRUNK
+interface port-channel 2
+ switchport mode trunk
+ switchport trunk native vlan 99    
+!
+! ETHERCHANNEL 3
+Interface range fa0/23 - 24
+ switchport mode trunk
+ switchport trunk native vlan 99 
+ channel-group 3 mode active
+!
+! ETHERCHANNEL 3 COMO TRUNK
+interface port-channel 3
+ switchport mode trunk
+ switchport trunk native vlan 99    
+!
+! PORTAS DOS VLANS
+interface range fa0/1 - 5
+ switchport mode access
+ switchport access vlan 10 
+
+interface range fa0/6 - 10
+ switchport mode access 
+ switchport access vlan 20
+
+interface range fa0/11 - 15
+ switchport mode access
+ switchport access vlan 30
+!
+! VLAN MANAGEMENT
+interface vlan 100
+ ip address 10.0.0.54 255.255.255.240
+ no shutdown 
+!
+! Gateway padrão da rede de gerenciamento Router 1
+ip default-gateway 10.0.0.49
+!
+! Cria lista de acesso permitindo PC14(ADMIN) aceder a telnet
+ip access-list extended TELNET-ADMIN
+ permit tcp host 10.0.0.56 any eq 23
+ deny   tcp any any eq 23
+ permit ip any any
+line vty 0 4
+ access-class TELNET-ADMIN in
+ login
+ password cisco
+-----------------------------------------------------------------------------------------
+!
+!s8
+hostname s8
+!
+! VLANS
+ vlan 10
+ name VENDAS
+vlan 20
+ name MARKETING
+vlan 30
+ name RH
+vlan 99
+ name NATIVE
+vlan 100
+ name MANAGEMENT
+!
+interface gi0/1
+ switchport mode trunk
+ switchport trunk native vlan 99
+!
+! ETHERCHANNEL 1
+Interface range fa0/23-24
+ switchport mode trunk
+ switchport trunk native vlan 99
+ channel-group 1 mode active
+!
+! ETHERCHANNEL 1 COMO TRUNK
+interface port-channel 1
+ switchport mode trunk
+ switchport trunk native vlan 99    
+!
+! PORTAS DOS VLANS
+interface range fa0/1 - 5
+ switchport mode access
+ switchport access vlan 10 
+
+interface range fa0/6 - 10
+ switchport mode access 
+ switchport access vlan 20
+
+interface range fa0/11 - 15
+ switchport mode access
+ switchport access vlan 30
+!
+! VLAN MANAGEMENT
+interface vlan 100
+ ip address 10.0.0.178 255.255.255.240
+ no shutdown 
+!
+! Gateway padrão da rede de gerenciamento
+ip default-gateway 10.0.0.177
+!
+! TELNET
+line vty 0 4
+ password cisco
+ login
+!
+--------------------------------------------------------------------
+!
+!s7
+hostname s7
+!
+! VLANS
+ vlan 10
+ name VENDAS
+vlan 20
+ name MARKETING
+vlan 30
+ name RH
+vlan 99
+ name NATIVE
+vlan 100
+ name MANAGEMENT
+!
+interface gi0/1
+ switchport mode trunk
+ switchport trunk native vlan 99
+!
+! ETHERCHANNEL 1
+Interface range fa0/23-24
+ switchport mode trunk
+ switchport trunk native vlan 99
+ channel-group 1 mode active
+!
+! ETHERCHANNEL 1 COMO TRUNK
+interface port-channel 1
+ switchport mode trunk
+ switchport trunk native vlan 99    
+!
+! PORTAS DOS VLANS
+interface range fa0/1 - 5
+ switchport mode access
+ switchport access vlan 10 
+
+interface range fa0/6 - 10
+ switchport mode access 
+ switchport access vlan 20
+
+interface range fa0/11 - 15
+ switchport mode access
+ switchport access vlan 30
+!
+! VLAN MANAGEMENT
+interface vlan 100
+ ip address 10.0.0.179 255.255.255.240
+ no shutdown 
+!
+! Gateway padrão da rede de gerenciamento
+ip default-gateway 10.0.0.177
+!
+! TELNET
+line vty 0 4
+ password cisco
+ login
+!
